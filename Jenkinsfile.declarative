@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Yogivishnu95/tomcat-project.git'
+            }
+        }
+
+		stage('Test') {
+            steps {
+                echo 'This is Test Stage'
+            }
+        }
+		
+        stage('Build') {
+            steps {
+				 sh 'mvn clean package'
+			}
+			post{
+				success{
+					echo "Archiving the Artifacts"
+					archiveArtifacts artifacts: '**/target/*.war'
+				}
+			}
+        }
+
+        stage ('Deploy to tomcat server'){
+			steps{
+				deploy adapters: [tomcat9(credentialsId: '435f561a-efb9-4da6-a792-490d63b2087e', path: '', url: 'http://43.205.203.160:8080/')], contextPath: null, war: '**/*.war'
+			}
+		}
+	}
+}
