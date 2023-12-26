@@ -4,32 +4,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Yogivishnu95/tomcat-project.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Yogivishnu95/tomcat-project.git'
             }
         }
 
-		stage('Test') {
-            steps {
-                echo 'This is Test Stage'
-            }
-        }
-		
         stage('Build') {
             steps {
-				 sh 'mvn clean package'
-			}
-			post{
-				success{
-					echo "Archiving the Artifacts"
-					archiveArtifacts artifacts: '**/target/*.war'
-				}
-			}
+                sh 'mvn clean package'
+            }
         }
 
-        stage ('Deploy to tomcat server'){
-			steps{
-				deploy adapters: [tomcat9(credentialsId: 'dc6546fc-d520-4402-8c40-9160a8549f30', path: '', url: 'https://3.110.162.146:8080/')], contextPath: null, war: '**/target/*.war'
-			}
-		}
-	}
+        stage('Push') {
+            steps {
+                echo 'This is Push Stage'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'sudo cp /home/ec2-user/git/tomcat-project/target/TomcatMavenApp-2.0.war /home/ec2-user/apache-tomcat-9.0.83/webapps'
+            }
+        }
+
+    }
+
 }
