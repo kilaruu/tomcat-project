@@ -24,7 +24,7 @@ pipeline
             {
                 steps 
                 {
-                    sh 'sudo cp /home/ec2-user/workspace/demo-Tomcat/targetTomcatMavenApp-2.0.war /home/ec2-user/tomcat/webapps'
+                    sh 'sudo cp /home/ec2-user/workspace/demo-Tomcat/target/TomcatMavenApp-2.0.war /home/ec2-user/tomcat/webapps'
                 }
             }
     }
