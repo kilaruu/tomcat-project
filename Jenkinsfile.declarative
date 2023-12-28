@@ -1,6 +1,6 @@
 pipeline 
 {
-    agent { label 'Agent-Devops' }
+    agent { label 'tomcat' }
 
     stages 
     {
